@@ -1,0 +1,7 @@
+*~
+*.mallet
+keys.txt
+topic-state.gz
+database
+*.pyc
+compostion.txt
