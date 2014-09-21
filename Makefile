@@ -24,6 +24,4 @@ master_topics.txt: topic-state.gz cleanFifo
 	python encodeMalletOutput.py > $@ &
 
 doneLoading: master_topics.txt
-	mysql -e "DROP TABLE IF EXISTS master_topicWords" $(dbName)
-	mysql -e "CREATE TABLE master_topicWords (bookid MEDIUMINT UNSIGNED, wordid MEDIUMINT, topic SMALLINT UNSIGNED, count MEDIUMINT,PRIMARY KEY (wordid,bookid,count),INDEX(topic,wordid,bookid,count))" $(dbName)
-	mysql -e "LOAD DATA LOCAL INFILE 'master_topics.txt' INTO TABLE master_topicWords" $(dbName)
+	python enableMalletFields.py

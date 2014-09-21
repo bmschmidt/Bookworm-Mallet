@@ -6,7 +6,6 @@ import ConfigParser as conf
 confs = conf.RawConfigParser()
 confs.read("../../bookworm.cnf")
 dbname = confs.get("client","database")
-
 con = MySQLdb.connect(host="localhost",read_default_file="~/.my.cnf",db=dbname)
 
 cursor = con.cursor(MySQLdb.cursors.SSCursor)
@@ -38,7 +37,7 @@ for line in open("keys.txt"):
             cursor.execute("SELECT casesens FROM wordsheap WHERE wordid=%s" % wordid)
             seen[wordid] = cursor.fetchall()[0][0]
             token = seen[wordid]
-        tokens.append(token)
+        tokens.append(MySQLdb.escape_string(token))
         n+=1
         if n > 6:
             break

@@ -8,6 +8,7 @@ names(a) = c("k","v");
 a$k = gsub(" $","",a$k);
 a$v = gsub("^ ","",a$v); 
 dbname = as.character(a$v[a$k=="database"])
+cat(dbname)
 
 con = dbConnect("MySQL",dbname=dbname)
 
