@@ -1,71 +1,62 @@
-from tokenizer import *
 import gzip
-Dictionary = readDictionaryFile("../../")
-IDfile = readIDfile("../../")
-
-MalletIDs = dict()
-
-for line in open("compostion.txt"):
-    m = line.split("\t")
-    try:
-        MalletIDs[m[0]] = m[1]
-    except IndexError:
-        pass
 
 input = gzip.open("topic-state.gz")
 
 thisDoc = -1
 counts = dict()
+
+#The first three lines aren't useful for us.
 input.readline()
 input.readline()
 input.readline()
 
-def printOutBook(counts):
-    for type in counts.keys():
-        for topic in counts[type].keys():
+
+"""
+To save space, we write the long version to stdout, but the compact (just doc-topic assignments) 
+version to disk in the file "topicAssignments.txt"
+"""
+
+topicAssignments = open("topicAssignments.txt","w")
+
+def printOutBook(counts,thisDoc):
+    topics = dict()
+    for token in counts.keys():
+        for topic in counts[token].keys():
             try:
-                #Two layers of lookups for the bookids.
-                try:
-                    malletID = MalletIDs[doc]
-                except KeyError:
-                    print "no id for " + doc
-                try:
-                    bookid = IDfile[MalletIDs[doc]]
-                except:
-                    print "no bookid for " + MalletIDs[doc]
-                wordid = Dictionary[type]
-                topic = topic
-                count = str(counts[type][topic])
-                #This is where it actually gets printed out.
-                print "\t".join([bookid,wordid,topic,count])
+                topics[topic] += counts[token][topic]
             except KeyError:
-                print "no match for '" + type + "' " + topic
+                topics[topic] = counts[token][topic]
+            print "\t".join([thisDoc,token,topic,str(counts[token][topic])])
+    for topic in topics.keys():
+        topicAssignments.write("\t".join([thisDoc,topic,str(topics[topic])]) + "\n")
+
 
 for line in input:
     line = line.rstrip("\n")
     lookups = dict()
     line = line.split(" ")
     doc = line[0]
-    type = line[4]
+    token = line[4]
     topic = line[5]
 
     if doc != thisDoc:
-        if MalletIDs[doc] in IDfile:
-            printOutBook(counts)
+        printOutBook(counts,thisDoc)
+
+        thisDoc = doc
         counts = dict()
         
     try:
-        counts[type][topic] += 1
+        counts[token][topic] += 1
     except KeyError:
         try:
-            counts[type][topic] = 1
+            counts[token][topic] = 1
         except KeyError:
-            counts[type] = dict()
-            counts[type][topic] = 1
+            counts[token] = dict()
+            counts[token][topic] = 1
 
 #And once for the last document
 try:
-    printOutBook(counts)
+    printOutBook(counts,thisDoc)
 except:
     #It seems to work fine with the blank last line, but just in case.
     pass

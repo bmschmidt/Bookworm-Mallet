@@ -6,3 +6,7 @@ database
 *.pyc
 compostion.txt
 input.txt
+fakeinput.txt
+.R*
+topicAssignments.txt
+stopwords.txt

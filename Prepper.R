@@ -1,8 +1,13 @@
+#!/usr/bin/R
 
 library(RMySQL)
 library(dplyr)
 
-dbname = "movies"
+a= read.table("../../bookworm.cnf",sep="=",row.names=NULL);
+names(a) = c("k","v");
+a$k = gsub(" $","",a$k);
+a$v = gsub("^ ","",a$v); 
+dbname = as.character(a$v[a$k=="database"])
 
 con = dbConnect("MySQL",dbname=dbname)
 
@@ -18,9 +23,9 @@ output$stopword[is.na(output$stopword)] = 0
 
 output = output %>% select(wordid,stopword)
 
+dbGetQuery(con,"DROP TABLE IF EXISTS stopwords")
 dbGetQuery(con,"CREATE TABLE stopwords (wordid MEDIUMINT, PRIMARY KEY (wordid), stopword TINYINT);")
-write.table(output,file="tmp.txt",sep="\t",row.names=F,col.names=F)
+write.table(output,file="stopwords.txt",sep="\t",row.names=F,col.names=F)
 
-dbGetQuery(con,"LOAD DATA LOCAL INFILE 'tmp.txt' INTO TABLE stopwords")
+dbGetQuery(con,"LOAD DATA LOCAL INFILE 'stopwords.txt' INTO TABLE stopwords")
 
-dbGetQuery(con,)
