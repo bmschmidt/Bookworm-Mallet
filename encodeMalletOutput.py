@@ -18,6 +18,16 @@ version to disk in the file "topicAssignments.txt"
 
 topicAssignments = open("topicAssignments.txt","w")
 
+def return_lookup_keys():
+    docids = dict()
+    for line in open("compostion.txt"):
+        try:
+            splat = line.split("\t")
+            docids[splat[0]] = splat[1]
+        except IndexError:
+            pass
+    return docids
+
 def printOutBook(counts,thisDoc):
     topics = dict()
     for token in counts.keys():
@@ -31,11 +41,18 @@ def printOutBook(counts,thisDoc):
         topicAssignments.write("\t".join([thisDoc,topic,str(topics[topic])]) + "\n")
 
 
+docids = return_lookup_keys()
+
 for line in input:
     line = line.rstrip("\n")
     lookups = dict()
     line = line.split(" ")
-    doc = line[0]
+    try:
+        doc = docids[line[0]]
+    except KeyError:
+        print "docid " + line[0] + " not in lookups: moving on..."
+        continue
+
     token = line[4]
     topic = line[5]
 
