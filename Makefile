@@ -1,8 +1,15 @@
-nTopics=64
+nTopics=63
 dbName=$(shell cat ../../bookworm.cnf | sed -n 's/database *= *\(.*\)/\1/p')
 
 
 all: topic-state.gz doneLoading
+
+clean:
+	rm -f stopwords.txt
+	rm -f fakeinput.txt
+	rm -f files.mallet
+	rm -f topic-state.gz
+	rm -f master_topics.txt
 
 stopwords.txt:
 	Rscript Prepper.R
