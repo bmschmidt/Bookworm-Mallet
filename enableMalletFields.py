@@ -43,9 +43,6 @@ cursor.execute("""LOAD DATA LOCAL INFILE
 cursor.execute("ALTER TABLE master_topicCounts ENABLE KEYS")
 
 
-
-
-
 seen = dict()
 
 cursor.execute("DROP TABLE IF EXISTS topic_labels")
