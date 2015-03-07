@@ -10,7 +10,7 @@ a$v = gsub("^ ","",a$v);
 dbname = as.character(a$v[a$k=="database"])
 cat(dbname)
 
-con = dbConnect("MySQL",dbname=dbname)
+con = dbConnect(MySQL(),dbname=dbname)
 
 words = dbGetQuery(con,"SELECT * FROM wordsheap")
 stopwords = read.table("bookwormStopwords.txt",sep="\t",quote="")
