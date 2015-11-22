@@ -3,7 +3,7 @@
 library(RMySQL)
 library(dplyr)
 
-a= read.table("../../bookworm.cnf",sep="=",row.names=NULL);
+a= read.table("../../../bookworm.cnf",sep="=",row.names=NULL);
 names(a) = c("k","v");
 a$k = gsub(" $","",a$k);
 a$v = gsub("^ ","",a$v); 

@@ -1,5 +1,5 @@
 nTopics=63
-dbName=$(shell cat ../../bookworm.cnf | sed -n 's/database *= *\(.*\)/\1/p')
+dbName=$(shell cat ../../../bookworm.cnf | sed -n 's/database *= *\(.*\)/\1/p')
 
 
 all: topic-state.gz doneLoading

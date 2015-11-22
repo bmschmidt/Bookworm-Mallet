@@ -4,7 +4,7 @@ from random import shuffle
 import ConfigParser as conf
 
 confs = conf.RawConfigParser()
-confs.read("../../bookworm.cnf")
+confs.read("../../../bookworm.cnf")
 dbname = confs.get("client","database")
 con = MySQLdb.connect(host="localhost",read_default_file="~/.my.cnf",db=dbname)
 
